@@ -10,8 +10,8 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 type Props = {
   initialOrders: FrozenOrder[];
   initialProducts: CatalogProduct[];
-  initialEncomendas: EncomendaRevenueRecord[];
-  initialEventos: EventRecord[];
+  initialEncomendas?: EncomendaRevenueRecord[];
+  initialEventos?: EventRecord[];
 };
 
 type Quantities = Record<string, number>;
@@ -23,7 +23,7 @@ const statusLabels: Record<FrozenOrderStatus, string> = {
   entregue: "Entregue",
 };
 
-export function FrozenOrderManager({ initialOrders, initialProducts, initialEncomendas, initialEventos }: Props) {
+export function FrozenOrderManager({ initialOrders, initialProducts, initialEncomendas = [], initialEventos = [] }: Props) {
   const [orders, setOrders] = useState(initialOrders);
   const [products] = useState(initialProducts);
   const [selectedOrderId, setSelectedOrderId] = useState(initialOrders[0]?.id ?? null);
@@ -934,4 +934,3 @@ export function FrozenOrderManager({ initialOrders, initialProducts, initialEnco
     </div>
   );
 }
-
