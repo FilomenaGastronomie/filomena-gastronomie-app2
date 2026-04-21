@@ -16,6 +16,19 @@ export function formatDateTime(dateTime: string) {
   }).format(new Date(dateTime));
 }
 
+export function formatMonthLabel(monthValue: string) {
+  if (!monthValue) {
+    return "";
+  }
+
+  const [year, month] = monthValue.split("-");
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(Number(year), Number(month) - 1, 1));
+}
+
 export function todayInputValue() {
   const now = new Date();
   const offset = now.getTimezoneOffset();
