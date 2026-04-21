@@ -1,0 +1,28 @@
+[
+  {
+    "id": "evento-exemplo-1",
+    "cliente": "Ateliê Verde",
+    "telefone": "11944443333",
+    "endereco": "Rua Harmonia, 300 - Vila Madalena",
+    "data": "2026-04-17",
+    "pessoas": 25,
+    "valorPorPessoa": 58,
+    "custoStaff": 350,
+    "custoExtras": 240,
+    "total": 1800,
+    "criadoEm": "2026-04-17T13:10:00.000Z"
+  },
+  {
+    "id": "evento-exemplo-2",
+    "cliente": "Família Souza",
+    "telefone": "11933332222",
+    "endereco": "Rua Aurora, 90 - Moema",
+    "data": "2026-04-05",
+    "pessoas": 15,
+    "valorPorPessoa": 62,
+    "custoStaff": 220,
+    "custoExtras": 150,
+    "total": 1150,
+    "criadoEm": "2026-04-05T11:20:00.000Z"
+  }
+]

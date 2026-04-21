@@ -1,0 +1,24 @@
+[
+  {
+    "id": "encomenda-exemplo-1",
+    "cliente": "Luciana Alves",
+    "telefone": "11966665555",
+    "endereco": "Rua das Figueiras, 220 - Vila Nova",
+    "data": "2026-04-19",
+    "valor": 320,
+    "custo": 120,
+    "descricao": "Bolo de aniversário e docinhos",
+    "criadoEm": "2026-04-19T15:30:00.000Z"
+  },
+  {
+    "id": "encomenda-exemplo-2",
+    "cliente": "Carlos Eduardo",
+    "telefone": "11955554444",
+    "endereco": "Avenida Central, 48 - Bela Vista",
+    "data": "2026-04-10",
+    "valor": 180,
+    "custo": 70,
+    "descricao": "Torta salgada",
+    "criadoEm": "2026-04-10T12:00:00.000Z"
+  }
+]

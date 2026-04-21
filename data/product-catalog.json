@@ -1,0 +1,86 @@
+[
+  {
+    "id": "strogonoff-frango",
+    "nome": "Strogonoff de frango",
+    "preco": 37.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "sobrecoxa-creme-milho",
+    "nome": "Sobrecoxa com creme de milho",
+    "preco": 38.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "panqueca-palmito",
+    "nome": "Panqueca de palmito",
+    "preco": 42.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "panqueca-carne",
+    "nome": "Panqueca de carne",
+    "preco": 43.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "panqueca-frango",
+    "nome": "Panqueca de frango",
+    "preco": 37.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "frango-indiano",
+    "nome": "Frango indiano",
+    "preco": 41.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "picadinho",
+    "nome": "Picadinho",
+    "preco": 40.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "tilapia-moqueca",
+    "nome": "Tilápia moqueca",
+    "preco": 45.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "tilapia-ervas",
+    "nome": "Tilápia com ervas",
+    "preco": 45.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "boeuf-bourguignon",
+    "nome": "Boeuf bourguignon",
+    "preco": 45.9,
+    "modulo": "congelados",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "bolo-festa",
+    "nome": "Bolo de festa",
+    "preco": 0,
+    "modulo": "encomendas",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "docinhos",
+    "nome": "Docinhos",
+    "preco": 0,
+    "modulo": "encomendas",
+    "criadoEm": "2026-01-01T00:00:00.000Z"
+  }
+]

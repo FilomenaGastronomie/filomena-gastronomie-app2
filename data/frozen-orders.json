@@ -1,0 +1,151 @@
+[
+  {
+    "id": "588cdda5-560c-4bdb-ba63-03001934afbe",
+    "cliente": "CAROL MORAES",
+    "telefone": "41996736878",
+    "endereco": "JOSE DE ALENCAR, 20",
+    "data": "2026-04-21",
+    "tipoEntrega": "entrega",
+    "status": "pendente",
+    "taxaEntrega": 25,
+    "custoTotal": 0,
+    "itens": [
+      {
+        "productId": "strogonoff-frango",
+        "nome": "Strogonoff de frango",
+        "precoUnitario": 37.9,
+        "quantidade": 1,
+        "total": 37.9
+      },
+      {
+        "productId": "sobrecoxa-creme-milho",
+        "nome": "Sobrecoxa com creme de milho",
+        "precoUnitario": 38.9,
+        "quantidade": 1,
+        "total": 38.9
+      },
+      {
+        "productId": "panqueca-palmito",
+        "nome": "Panqueca de palmito",
+        "precoUnitario": 42.9,
+        "quantidade": 2,
+        "total": 85.8
+      },
+      {
+        "productId": "panqueca-carne",
+        "nome": "Panqueca de carne",
+        "precoUnitario": 43.9,
+        "quantidade": 3,
+        "total": 131.7
+      },
+      {
+        "productId": "frango-indiano",
+        "nome": "Frango indiano",
+        "precoUnitario": 41.9,
+        "quantidade": 1,
+        "total": 41.9
+      },
+      {
+        "productId": "tilapia-ervas",
+        "nome": "Tilápia com ervas",
+        "precoUnitario": 45.9,
+        "quantidade": 1,
+        "total": 45.9
+      }
+    ],
+    "subtotal": 382.0999999999999,
+    "total": 407.0999999999999,
+    "criadoEm": "2026-04-20T21:57:28.329Z"
+  },
+  {
+    "id": "8dfef888-8e7c-4bd9-8782-6b411c353ea2",
+    "cliente": "CAROL",
+    "data": "2026-04-09",
+    "tipoEntrega": "entrega",
+    "taxaEntrega": 30,
+    "itens": [
+      {
+        "productId": "strogonoff-frango",
+        "nome": "Strogonoff de frango",
+        "precoUnitario": 37.9,
+        "quantidade": 2,
+        "total": 75.8
+      },
+      {
+        "productId": "panqueca-frango",
+        "nome": "Panqueca de frango",
+        "precoUnitario": 37.9,
+        "quantidade": 1,
+        "total": 37.9
+      },
+      {
+        "productId": "tilapia-moqueca",
+        "nome": "Tilápia moqueca",
+        "precoUnitario": 45.9,
+        "quantidade": 2,
+        "total": 91.8
+      }
+    ],
+    "subtotal": 205.5,
+    "total": 235.5,
+    "criadoEm": "2026-04-20T21:48:21.273Z"
+  },
+  {
+    "id": "pedido-exemplo-1",
+    "cliente": "Marina Costa",
+    "telefone": "11988887777",
+    "endereco": "Rua das Acacias, 120 - Jardim Europa",
+    "data": "2026-04-18",
+    "tipoEntrega": "entrega",
+    "taxaEntrega": 8,
+    "custoTotal": 72,
+    "itens": [
+      {
+        "productId": "strogonoff-frango",
+        "nome": "Strogonoff de frango",
+        "precoUnitario": 37.9,
+        "quantidade": 2,
+        "total": 75.8
+      },
+      {
+        "productId": "panqueca-palmito",
+        "nome": "Panqueca de palmito",
+        "precoUnitario": 42.9,
+        "quantidade": 1,
+        "total": 42.9
+      }
+    ],
+    "subtotal": 118.7,
+    "total": 126.7,
+    "criadoEm": "2026-04-18T14:20:00.000Z"
+  },
+  {
+    "id": "pedido-exemplo-2",
+    "cliente": "Joana Ribeiro",
+    "telefone": "11977776666",
+    "endereco": "Alameda Santos, 85 - Centro",
+    "data": "2026-04-15",
+    "tipoEntrega": "retirada",
+    "taxaEntrega": 0,
+    "custoTotal": 80,
+    "itens": [
+      {
+        "productId": "tilapia-moqueca",
+        "nome": "Tilápia moqueca",
+        "precoUnitario": 45.9,
+        "quantidade": 2,
+        "total": 91.8
+      },
+      {
+        "productId": "picadinho",
+        "nome": "Picadinho",
+        "precoUnitario": 40.9,
+        "quantidade": 1,
+        "total": 40.9
+      }
+    ],
+    "subtotal": 132.7,
+    "total": 132.7,
+    "criadoEm": "2026-04-15T17:05:00.000Z"
+  }
+]
