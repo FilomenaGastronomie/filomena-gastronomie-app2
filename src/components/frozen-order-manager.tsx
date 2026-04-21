@@ -2,14 +2,16 @@
 
 import { useMemo, useRef, useState } from "react";
 import { COMPANY_NAME } from "@/lib/brand";
-import { formatCurrency, formatDate, formatDateTime, todayInputValue } from "@/lib/format";
+import { formatCurrency, formatDate, formatDateTime, formatMonthLabel, todayInputValue } from "@/lib/format";
 import { getCurrentMonthValue, getCurrentWeekValue, getMonthValue, getWeekValue } from "@/lib/periods";
-import { CatalogProduct, FrozenOrder, FrozenOrderStatus } from "@/lib/types";
+import { CatalogProduct, EncomendaRevenueRecord, EventRecord, FrozenOrder, FrozenOrderStatus } from "@/lib/types";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 type Props = {
   initialOrders: FrozenOrder[];
   initialProducts: CatalogProduct[];
+  initialEncomendas: EncomendaRevenueRecord[];
+  initialEventos: EventRecord[];
 };
 
 type Quantities = Record<string, number>;
@@ -21,7 +23,7 @@ const statusLabels: Record<FrozenOrderStatus, string> = {
   entregue: "Entregue",
 };
 
-export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
+export function FrozenOrderManager({ initialOrders, initialProducts, initialEncomendas, initialEventos }: Props) {
   const [orders, setOrders] = useState(initialOrders);
   const [products] = useState(initialProducts);
   const [selectedOrderId, setSelectedOrderId] = useState(initialOrders[0]?.id ?? null);
@@ -30,13 +32,14 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
   const [telefone, setTelefone] = useState("");
   const [endereco, setEndereco] = useState("");
   const [data, setData] = useState(todayInputValue());
+  const [horario, setHorario] = useState("");
   const [tipoEntrega, setTipoEntrega] = useState<"entrega" | "retirada">("entrega");
   const [taxaEntrega, setTaxaEntrega] = useState("0");
-  const [custoTotal, setCustoTotal] = useState("0");
   const [nameFilter, setNameFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [weekFilter, setWeekFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
+  const [monthlyCalculatorMonth, setMonthlyCalculatorMonth] = useState(getCurrentMonthValue());
   const [feedback, setFeedback] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const formCardRef = useRef<HTMLElement | null>(null);
@@ -68,7 +71,6 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
 
   const deliveryFeeValue = tipoEntrega === "retirada" ? 0 : Number(taxaEntrega || 0);
   const total = subtotal + deliveryFeeValue;
-  const estimatedProfit = total - Number(custoTotal || 0);
   const selectedOrder = useMemo(() => {
     return orders.find((order) => order.id === selectedOrderId) ?? orders[0] ?? null;
   }, [orders, selectedOrderId]);
@@ -137,6 +139,17 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
       .reduce((acc, order) => acc + (order.total - order.custoTotal), 0);
   }, [orders]);
 
+  const monthlyCalculator = useMemo(() => {
+    const filteredByMonth = orders.filter((order) => getMonthValue(order.data) === monthlyCalculatorMonth);
+
+    return {
+      pedidos: filteredByMonth.length,
+      faturamento: filteredByMonth.reduce((acc, order) => acc + order.total, 0),
+      taxas: filteredByMonth.reduce((acc, order) => acc + order.taxaEntrega, 0),
+      lucro: filteredByMonth.reduce((acc, order) => acc + (order.total - order.custoTotal), 0),
+    };
+  }, [monthlyCalculatorMonth, orders]);
+
   const summaryText = useMemo(() => {
     if (!selectedOrder) {
       return "";
@@ -148,6 +161,7 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
       `Telefone: ${selectedOrder.telefone || "-"}`,
       `Endereço: ${selectedOrder.endereco || "-"}`,
       `Data: ${formatDate(selectedOrder.data)}`,
+      `Horário: ${selectedOrder.horario || "-"}`,
       `Entrega: ${selectedOrder.tipoEntrega === "entrega" ? "Entrega" : "Retirada"}`,
       "",
       "Item | Qtde | Unit | Total",
@@ -170,6 +184,7 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
       `Cliente: ${order.cliente}`,
       `Telefone: ${order.telefone || "-"}`,
       `Data: ${formatDate(order.data)}`,
+      `Horário: ${order.horario || "-"}`,
       `Endereço: ${order.endereco || "-"}`,
       `Entrega: ${order.tipoEntrega === "entrega" ? "Entrega" : "Retirada"}`,
       "",
@@ -195,9 +210,9 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
     setTelefone("");
     setEndereco("");
     setData(todayInputValue());
+    setHorario("");
     setTipoEntrega("entrega");
     setTaxaEntrega("0");
-    setCustoTotal("0");
     setQuantities(Object.fromEntries(products.map((product) => [product.id, 0])));
   }
 
@@ -212,9 +227,9 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
     setTelefone(order.telefone);
     setEndereco(order.endereco);
     setData(order.data);
+    setHorario(order.horario || "");
     setTipoEntrega(order.tipoEntrega);
     setTaxaEntrega(String(order.taxaEntrega));
-    setCustoTotal(String(order.custoTotal));
     setQuantities(nextQuantities);
   }
 
@@ -314,10 +329,11 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
       telefone: telefone.trim(),
       endereco: endereco.trim(),
       data,
+      horario: horario.trim(),
       tipoEntrega,
       status: editingOrder?.status ?? ("pendente" as FrozenOrderStatus),
       taxaEntrega: deliveryFeeValue,
-      custoTotal: Number(custoTotal || 0),
+      custoTotal: editingOrder?.custoTotal ?? 0,
       itens: selectedItems,
       subtotal,
       total,
@@ -405,6 +421,7 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
             <div class="label">Ficha de entrega</div>
             <p><strong>Cliente:</strong> ${order.cliente}</p>
             <p><strong>Data:</strong> ${formatDate(order.data)}</p>
+            <p><strong>Horario:</strong> ${order.horario || "-"}</p>
             <p><strong>Endereço:</strong> ${order.endereco || "-"}</p>
             <p><strong>Tipo:</strong> ${order.tipoEntrega === "entrega" ? "Entrega" : "Retirada"}</p>
           </div>
@@ -486,6 +503,11 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
             </label>
 
             <label>
+              <span>Horário</span>
+              <input type="time" value={horario} onChange={(event) => setHorario(event.target.value)} />
+            </label>
+
+            <label>
               <span>Entrega ou retirada</span>
               <select
                 value={tipoEntrega}
@@ -514,16 +536,6 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
               />
             </label>
 
-            <label>
-              <span>Custo total do pedido</span>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={custoTotal}
-                onChange={(event) => setCustoTotal(event.target.value)}
-              />
-            </label>
           </div>
 
           <div className="product-list">
@@ -562,7 +574,7 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
             })}
           </div>
 
-          <div className="totals-box totals-box-four">
+          <div className="totals-box">
             <div>
               <span>Subtotal</span>
               <strong>{formatCurrency(subtotal)}</strong>
@@ -574,10 +586,6 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
             <div className="total-highlight">
               <span>Total final</span>
               <strong>{formatCurrency(total)}</strong>
-            </div>
-            <div>
-              <span>Lucro estimado</span>
-              <strong>{formatCurrency(estimatedProfit)}</strong>
             </div>
           </div>
 
@@ -670,6 +678,9 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
                 <span>{selectedOrder.tipoEntrega === "entrega" ? "Entrega" : "Retirada"}</span>
               </div>
               <div className="summary-address">
+                <span>Horário: {selectedOrder.horario || "-"}</span>
+              </div>
+              <div className="summary-address">
                 <span>Telefone: {selectedOrder.telefone || "-"}</span>
               </div>
               <div className="summary-address">
@@ -757,38 +768,79 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
               : "Nenhum filtro ativo. A lista mostra todos os pedidos."}
           </p>
 
-          <div className="metrics-grid metrics-grid-wide">
-            <div className="metric">
-              <span>Faturamento semanal</span>
-              <strong>{formatCurrency(weeklyRevenue)}</strong>
+            <div className="metrics-grid metrics-grid-wide">
+              <div className="metric">
+                <span>Faturamento semanal</span>
+                <strong>{formatCurrency(weeklyRevenue)}</strong>
+              </div>
+              <div className="metric">
+                <span>Faturamento mensal</span>
+                <strong>{formatCurrency(monthlyRevenue)}</strong>
+              </div>
+              <div className="metric">
+                <span>Total vendido no filtro</span>
+                <strong>{formatCurrency(dashboard.totalVendido)}</strong>
+              </div>
+              <div className="metric">
+                <span>Total de taxas no filtro</span>
+                <strong>{formatCurrency(dashboard.totalTaxas)}</strong>
+              </div>
+              <div className="metric">
+                <span>Pedidos</span>
+                <strong>{filteredOrders.length}</strong>
             </div>
-            <div className="metric">
-              <span>Faturamento mensal</span>
-              <strong>{formatCurrency(monthlyRevenue)}</strong>
+          </div>
+
+          <div className="product-summary">
+            <div className="section-heading compact">
+              <div>
+                <p className="eyebrow">Calculadora</p>
+                <h3>Faturamento mensal</h3>
+              </div>
             </div>
-            <div className="metric">
-              <span>Lucro semanal</span>
-              <strong>{formatCurrency(weeklyProfit)}</strong>
+
+            <div className="filters-row">
+              <label className="week-filter">
+                <span>Mês</span>
+                <input
+                  type="month"
+                  value={monthlyCalculatorMonth}
+                  onChange={(event) => setMonthlyCalculatorMonth(event.target.value)}
+                />
+              </label>
             </div>
-            <div className="metric">
-              <span>Lucro mensal</span>
-              <strong>{formatCurrency(monthlyProfit)}</strong>
-            </div>
-            <div className="metric">
-              <span>Total vendido no filtro</span>
-              <strong>{formatCurrency(dashboard.totalVendido)}</strong>
-            </div>
-            <div className="metric">
-              <span>Total de taxas no filtro</span>
-              <strong>{formatCurrency(dashboard.totalTaxas)}</strong>
-            </div>
-            <div className="metric">
-              <span>Lucro no filtro</span>
-              <strong>{formatCurrency(dashboard.lucro)}</strong>
-            </div>
-            <div className="metric">
-              <span>Pedidos</span>
-              <strong>{filteredOrders.length}</strong>
+
+            <p className="filter-summary">
+              {monthlyCalculatorMonth ? `Resumo de ${formatMonthLabel(monthlyCalculatorMonth)}.` : "Escolha um mês."}
+            </p>
+
+            <div className="metrics-grid metrics-grid-wide">
+              <div className="metric">
+                <span>Pedidos</span>
+                <strong>{monthlyCalculator.pedidos}</strong>
+              </div>
+              <div className="metric">
+                <span>Faturamento</span>
+                <strong>{formatCurrency(monthlyCalculator.faturamento)}</strong>
+              </div>
+              <div className="metric">
+                <span>Taxas</span>
+                <strong>{formatCurrency(monthlyCalculator.taxas)}</strong>
+              </div>
+              <div className="metric">
+                <span>Faturamento geral</span>
+                <strong>
+                  {formatCurrency(
+                    monthlyCalculator.faturamento +
+                      initialEncomendas
+                        .filter((record) => getMonthValue(record.data) === monthlyCalculatorMonth)
+                        .reduce((acc, record) => acc + record.valor, 0) +
+                      initialEventos
+                        .filter((record) => getMonthValue(record.data) === monthlyCalculatorMonth)
+                        .reduce((acc, record) => acc + record.total, 0),
+                  )}
+                </strong>
+              </div>
             </div>
           </div>
 
@@ -812,9 +864,9 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
                   <th>Telefone</th>
                   <th>Endereço</th>
                   <th>Data</th>
+                  <th>Horário</th>
                   <th>Entrega</th>
                   <th>Status</th>
-                  <th>Lucro</th>
                   <th>Total</th>
                   <th>Pedido</th>
                   <th>Motorista</th>
@@ -828,9 +880,9 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
                     <td>{order.telefone || "-"}</td>
                     <td>{order.endereco || "-"}</td>
                     <td>{formatDate(order.data)}</td>
+                    <td>{order.horario || "-"}</td>
                     <td>{order.tipoEntrega === "entrega" ? "Entrega" : "Retirada"}</td>
                     <td>{statusLabels[order.status]}</td>
-                    <td>{formatCurrency(order.total - order.custoTotal)}</td>
                     <td>{formatCurrency(order.total)}</td>
                     <td>
                       <div className="inline-actions">
@@ -882,3 +934,4 @@ export function FrozenOrderManager({ initialOrders, initialProducts }: Props) {
     </div>
   );
 }
+
