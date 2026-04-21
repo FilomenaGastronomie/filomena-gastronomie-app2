@@ -50,6 +50,10 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      <a className="nav-link logout-link" href="/api/auth/logout">
+        Sair
+      </a>
     </aside>
   );
 }

@@ -3,6 +3,8 @@ import { getEncomendaRecords } from "@/lib/encomenda-records";
 import { getOrderNote } from "@/lib/order-notes";
 import { getCatalogProducts } from "@/lib/product-catalog";
 
+export const dynamic = "force-dynamic";
+
 export default async function EncomendasPage() {
   const [note, records, products] = await Promise.all([getOrderNote(), getEncomendaRecords(), getCatalogProducts()]);
 

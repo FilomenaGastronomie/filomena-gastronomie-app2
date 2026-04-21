@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { COMPANY_NAME, COMPANY_TAGLINE } from "@/lib/brand";
 import { InstallCard } from "@/components/install-card";
 import { Sidebar } from "@/components/sidebar";
@@ -16,17 +17,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const headerStore = await headers();
+  const pathname = headerStore.get("x-pathname") ?? "/";
+  const isLoginPage = pathname.startsWith("/login");
+
   return (
     <html lang="pt-BR">
       <body>
-        <div className="app-shell">
-          <Sidebar />
-          <main className="content">
-            <InstallCard />
-            {children}
-          </main>
-        </div>
+        {isLoginPage ? (
+          <main className="login-layout">{children}</main>
+        ) : (
+          <div className="app-shell">
+            <Sidebar />
+            <main className="content">
+              <InstallCard />
+              {children}
+            </main>
+          </div>
+        )}
       </body>
     </html>
   );
